@@ -17,7 +17,17 @@ def fuente_estable():
             path=(target/name).resolve()
             if not path.is_relative_to(target.resolve()):raise ValueError('Ruta de archivo no válida')
         z.extractall(target)
-    return target/'Herramienta_TFM'
+    source=target/'Herramienta_TFM'
+    substitutions={
+        'Guardado en este equipo. Se recupera al volver a abrir la herramienta.':'Guardado durante esta sesión. Descarga tus resultados antes de salir.',
+        'Archivo activo guardado en este equipo:':'Archivo activo en esta sesión:',
+        'Importa tu archivo CSV o ZIP. Se conserva una copia local para continuar al volver a abrir la herramienta.':'Importa tu CSV o ZIP. En esta publicación, los archivos y las revisiones se conservan durante la sesión.',
+    }
+    for filename in ('datos_ui.py','portada.py'):
+        path=source/filename;content=path.read_text(encoding='utf8')
+        for old,new in substitutions.items():content=content.replace(old,new)
+        path.write_text(content,encoding='utf8')
+    return source
 
 
 root=fuente_estable()
