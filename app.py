@@ -1,4 +1,4 @@
-"""Arranque de la versión estable del 12/11/2026. Fuente íntegra en el ZIP."""
+"""Arranque público del análisis arquitectónico, 15/11/2026. Datos aislados por sesión."""
 from pathlib import Path
 import hashlib
 import runpy
@@ -10,8 +10,10 @@ import streamlit as st
 
 @st.cache_resource
 def fuente_estable():
-    archive=Path(__file__).with_name('version_estable_2026_11_12.zip')
-    target=Path(tempfile.mkdtemp(prefix='tfm_version_estable_'))
+    archive=Path(__file__).with_name('version_analisis_2026_11_15.zip')
+    if hashlib.sha256(archive.read_bytes()).hexdigest() != '18a47cc0c684645eb117b1c49fd230d475e9ddb0f0013837046569254bbf031d':
+        raise ValueError('El paquete de la aplicación no coincide con su huella publicada.')
+    target=Path(tempfile.mkdtemp(prefix='tfm_analisis_2026_11_15_'))
     with ZipFile(archive) as z:
         for name in z.namelist():
             path=(target/name).resolve()
@@ -64,4 +66,4 @@ incidencias.historial=historial
 incidencias.guardar_revision=guardar_revision
 runpy.run_path(str(root/'app.py'),run_name='__main__')
 if st.session_state.get('acceso_abierto'):
-    st.sidebar.caption('Versión estable · 12/11/2026 · Los archivos y las revisiones de esta publicación se conservan durante la sesión. Descarga tus resultados antes de salir.')
+    st.sidebar.caption('Versión ampliada · 15/11/2026 · Análisis arquitectónico · Los archivos y las revisiones de esta publicación se conservan durante la sesión. Descarga tus resultados antes de salir.')
